@@ -58,7 +58,7 @@ class loading_page():
     
     def change_sep(self):
         if self.data_separator_check:
-            self.data_separator = st.text_input('seperator', ',')
+            self.data_separator = st.text_input('seperator', self.data_separator)
 
 
     def load_data(self):
