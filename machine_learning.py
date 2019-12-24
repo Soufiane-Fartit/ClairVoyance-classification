@@ -46,8 +46,8 @@ class ml_page():
         self.meta_model_check = st.checkbox("use a meta model ?")
 
     def get_meta_model(self):
-        self.meta_model = st.selectbox("choose a meta model (if meta model type is stacking)", self.meta_ml_list_names)
         self.meta_model_type = st.selectbox("meta model type :", ["voting", "stacking"])
+        self.meta_model = st.radio("choose a meta model (if meta model type is stacking)", self.meta_ml_list_names)
 
 
     def train_algs(self):
