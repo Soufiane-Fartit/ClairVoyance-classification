@@ -1,1 +1,1 @@
-web sh create_config.sh && streamlit run main.py
+web sh create_config.sh && apt-get install python3-tk && streamlit run main.py
