@@ -5,8 +5,6 @@ import numpy as np
 import pandas as pd
 
 import os
-import tkinter as tk
-from tkinter import filedialog
 
 class loading_page():
 
@@ -63,12 +61,8 @@ class loading_page():
 
 
     def get_path_or_link(self):
-        #self.link = st.text_input("link to dataframe", "Churn_Modelling.csv")
-        #self.link_button = st.button('Load data')
-        if st.button('Upload local file'):
-            root = tk.Tk()
-            root.withdraw()
-            file_path = filedialog.askopenfilename()
+        self.link = st.text_input("link to dataframe", "Churn_Modelling.csv")
+        self.link_button = st.button('Load data')
         self.path = self.file_selector()
         self.path_button = st.button('Load demo data')
         self.update_session(self.session_state)
