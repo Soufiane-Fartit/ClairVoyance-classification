@@ -121,7 +121,6 @@ class loading_page():
     def routine(self):
         self.get_path_or_link()
         self.load_data()
-        self.change_sep()
         self.show_raw_data()
         self.show_infos_data()
         self.get_pred_column()
