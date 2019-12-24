@@ -19,8 +19,8 @@ class loading_page():
         self.raw_data = session_state.raw_data
         self.data_check = session_state.data_check
         self.data_load_state = session_state.data_load_state
-        self.data_separator_check = False
-        self.data_separator = ','
+        self.data_separator_check = session_state.data_separator_check
+        self.data_separator = session_state.data_separator
         self.out_col = session_state.out_col
         self.unique_values = session_state.unique_values
         self.selected_filename = session_state.selected_filename
@@ -34,6 +34,8 @@ class loading_page():
         session_state.raw_data = self.raw_data
         session_state.data_check = self.data_check
         session_state.data_load_state = self.data_load_state
+        session_state.data_separator_check = self.data_separator_check
+        session_state.data_separator = self.data_separator
         session_state.out_col = self.out_col
         session_state.unique_values = self.unique_values
         session_state.selected_filename = self.selected_filename
@@ -49,10 +51,10 @@ class loading_page():
 
     def load_data_from_path_or_link(self, path):
         self.data_load_state = st.text('Loading dataset...')
-        self.raw_data = pd.read_csv(path, nrows=10000)
+        self.raw_data = pd.read_csv(path, nrows=10000, sep= self.data_separator)
         self.data_check = True
         self.data_load_state.success('Loading dataset...done!')
-        self.data_separator_check = st.button("bad seperator? press to change")
+    
     
     def change_sep(self):
         if self.data_separator_check:
@@ -64,6 +66,7 @@ class loading_page():
             self.load_data_from_path_or_link(self.link)
         if self.path_button:
             self.load_data_from_path_or_link(self.path)
+        self.data_separator_check = st.button("bad seperator? press to change")
         self.update_session(self.session_state)
 
 
@@ -144,6 +147,8 @@ if __name__ == "__main__":
                                     raw_data = None,
                                     data_check = False,
                                     data_load_state = 0,
+                                    data_separator_check = False,
+                                    data_separator= ',',
                                     out_col = "",
                                     unique_values = [],
                                     selected_filename = "",
