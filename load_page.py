@@ -19,6 +19,8 @@ class loading_page():
         self.raw_data = session_state.raw_data
         self.data_check = session_state.data_check
         self.data_load_state = session_state.data_load_state
+        self.data_separator_check = False
+        self.data_separator = ','
         self.out_col = session_state.out_col
         self.unique_values = session_state.unique_values
         self.selected_filename = session_state.selected_filename
@@ -50,6 +52,11 @@ class loading_page():
         self.raw_data = pd.read_csv(path, nrows=10000)
         self.data_check = True
         self.data_load_state.success('Loading dataset...done!')
+        self.data_separator_check = st.button("bad seperator? press to change")
+    
+    def change_sep(self):
+        if self.data_separator_check:
+            self.data_separator = st.selectbox('seperator', [',' , ';'])
 
 
     def load_data(self):
@@ -121,6 +128,7 @@ class loading_page():
     def routine(self):
         self.get_path_or_link()
         self.load_data()
+        self.change_sep()
         self.show_raw_data()
         self.show_infos_data()
         self.get_pred_column()
