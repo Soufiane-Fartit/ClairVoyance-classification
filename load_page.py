@@ -107,7 +107,6 @@ class loading_page():
                                         self.raw_data.columns,
                                         len(self.raw_data.columns)-1,
                                         key = "out_col_selectbox")
-            self.update_session(self.session_state)
             self.out_col_check = st.button('select')
             self.update_session(self.session_state)
 
