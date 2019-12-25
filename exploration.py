@@ -72,6 +72,7 @@ class exploration_page():
         st.pyplot()
 
     def plot_corr_matrix(self):
+        st.subheader("Correlation Matrix")
         sns.heatmap(self.raw_data\
                     .select_dtypes(exclude='object')\
                     .corr("spearman"),
@@ -92,6 +93,7 @@ class exploration_page():
         finalDf = pd.concat([principalDf,
                             y_res],
                             axis = 1)
+        plt.figure()
         graph = alt.Chart(finalDf)\
                     .mark_circle()\
                     .encode(x='principal component 1',
