@@ -25,6 +25,7 @@ class exploration_page():
         self.x_axis = None
         self.y_axis = None
         self.scatter_rows = []
+        self.corr_method = 'pearson'
 
 
     def get_2_axis_viz(self):
@@ -44,6 +45,10 @@ class exploration_page():
                                     self.raw_data\
                                     .select_dtypes(exclude='object')\
                                     .columns)
+    def get_corr(self):
+        st.subheader("Correlation Matrix")
+        self.corr_method = st.selectbox('correlation method :', ['pearson', 'kendall', 'spearman'])
+        
 
     def visualize_2_axis(self):
         graph = alt.Chart(self.raw_data).mark_circle().encode(x=self.x_axis, y=self.y_axis)
@@ -72,10 +77,10 @@ class exploration_page():
         st.pyplot()
 
     def plot_corr_matrix(self):
-        st.subheader("Correlation Matrix")
+        plt.figure()
         sns.heatmap(self.raw_data\
                     .select_dtypes(exclude='object')\
-                    .corr("spearman"),
+                    .corr(self.corr_method),
                     cmap="YlGnBu")
         st.pyplot()
 
@@ -112,6 +117,7 @@ class exploration_page():
             self.plot_hist()
         except:
             pass
+        self.get_corr()
         self.plot_corr_matrix()
         self.plot_pca()
 
