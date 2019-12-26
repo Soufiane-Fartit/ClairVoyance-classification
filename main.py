@@ -60,7 +60,7 @@ class clairevoyance():
 
     def switcher(self):
         st.sidebar.title("ClairVoyance - classification")
-        self.problem_type = st.selectbox("type of problem", ["classification", "regression"])
+        self.problem_type = st.sidebar.selectbox("type of problem", ["classification", "regression"])
         self.tab = st.sidebar.radio('Pick an option', ['Data Loading', 'Data Engineering', 'Data Exploration', 'Machine Learning'])
 
     def go_to_load(self):

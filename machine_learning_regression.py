@@ -182,7 +182,7 @@ class ml_reg_page():
             if alg == 'LinearSVR':
                 from sklearn.svm import LinearSVR
                 svc = LinearSVR()
-                svc_scores = cross_val_score(svc, X_train, Y_train, cv = self.k_cv)
+                svc_scores = cross_val_score(svc, X_train, Y_train, scoring='mean_squared_error', cv = self.k_cv)
                 st.write('LinearSVR score :', svc_scores.mean())
 
                 self.chosen_models_names.append('LinearSVR')
@@ -191,7 +191,7 @@ class ml_reg_page():
             elif alg == 'RidgeCV':
                 from sklearn.linear_model import RidgeCV
                 rid = RidgeCV()
-                rid_scores = cross_val_score(rid, X_train, Y_train, cv = self.k_cv)
+                rid_scores = cross_val_score(rid, X_train, Y_train, scoring='mean_squared_error', cv = self.k_cv)
                 st.write('RidgeCV score :', rid_scores.mean())
 
                 self.chosen_models_names.append('RidgeCV')
@@ -200,7 +200,7 @@ class ml_reg_page():
             elif alg == 'Random Forest Regressor':
                 from sklearn.ensemble import RandomForestRegressor
                 rfc = RandomForestRegressor()
-                rfc_scores = cross_val_score(rfc, X_train, Y_train, cv = self.k_cv)
+                rfc_scores = cross_val_score(rfc, X_train, Y_train, scoring='mean_squared_error', cv = self.k_cv)
                 st.write('Random Forest Regressor score :', rfc_scores.mean())
 
                 self.chosen_models_names.append('Random Forest Regressor')
@@ -209,7 +209,7 @@ class ml_reg_page():
             elif alg == 'Adaboost':
                 from sklearn.ensemble import AdaBoostRegressor
                 ada = AdaBoostRegressor()
-                ada_scores = cross_val_score(ada, X_train, Y_train, cv = self.k_cv)
+                ada_scores = cross_val_score(ada, X_train, Y_train, scoring='mean_squared_error', cv = self.k_cv)
                 st.write('Adaboost score :', ada_scores.mean())
 
                 self.chosen_models_names.append('Adaboost')
@@ -218,7 +218,7 @@ class ml_reg_page():
             elif alg == 'XGBoost':
                 import xgboost as xgb
                 xgb = xgb.XGBRegressor(n_estimators=300)
-                xgb_scores = cross_val_score(xgb, X_train, Y_train, cv = self.k_cv)
+                xgb_scores = cross_val_score(xgb, X_train, Y_train, scoring='mean_squared_error', cv = self.k_cv)
                 st.write('xgb score :', xgb_scores.mean())
 
                 self.chosen_models_names.append('XGBoost')
@@ -228,7 +228,7 @@ class ml_reg_page():
             if self.meta_model_type == "voting":
                 from sklearn.ensemble import VotingRegressor
                 stack = VotingRegressor(estimators=list(zip(self.chosen_models_names,self.chosen_models)), voting='hard')
-                stack_scores = cross_val_score(stack, X_train, Y_train, cv = self.k_cv)
+                stack_scores = cross_val_score(stack, X_train, Y_train, scoring='mean_squared_error', cv = self.k_cv)
                 st.write('voting score :', stack_scores.mean())
 
             else:
@@ -242,7 +242,7 @@ class ml_reg_page():
                     from sklearn.ensemble import RandomForestRegressor
                     stack = StackingRegressor(estimators=list(zip(self.chosen_models_names,self.chosen_models)), final_estimator=RandomForestRegressor())
 
-                stack_scores = cross_val_score(stack, X_train, Y_train, cv = self.k_cv)
+                stack_scores = cross_val_score(stack, X_train, Y_train, scoring='mean_squared_error', cv = self.k_cv)
                 st.write(self.meta_model+' stack score using cv :', stack_scores.mean())
 
 
