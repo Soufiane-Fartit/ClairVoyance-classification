@@ -23,7 +23,6 @@ import os
 
 class clairevoyance():
     def __init__(self, session_state):
-        self.problem_type = "classification"
         self.tab = "Data Loading"
         self.loading_session_state = SessionState.get(link = session_state.link,
                                                 path = session_state.path,
@@ -36,7 +35,7 @@ class clairevoyance():
                                                 unique_values = session_state.unique_values,
                                                 selected_filename = session_state.selected_filename,
                                                 out_col_check = session_state.out_col_check,
-                                                problem_type = self.problem_type)
+                                                problem_type = session_state.problem_type)
 
         self.de_session_state = SessionState.get(raw_data=session_state.raw_data,
                                                 out_col=session_state.out_col,
@@ -58,6 +57,7 @@ class clairevoyance():
         self.viz_page = exploration_page(self.viz_session_state)
         self.ml_page = ml_page(self.ml_session_state)
         self.ml_reg_page = ml_reg_page(self.ml_session_state)
+        self.problem_type = session_state.problem_type
 
     def switcher(self):
         st.sidebar.title("ClairVoyance - classification&regression")
@@ -113,7 +113,8 @@ if __name__ == "__main__":
                                     cat_impute_strategy="",
                                     encode_strategy="",
                                     scale_strategy="",
-                                    balance_strategy="")
+                                    balance_strategy="",
+                                    problem_type = "classification")
 
     page_zero = clairevoyance(session_state)
     page_zero.routine()
