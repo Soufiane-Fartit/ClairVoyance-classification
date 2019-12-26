@@ -307,15 +307,16 @@ class data_engineering_page():
             pass
 
 
-    def run_data_engineering(self):
+    def run_data_engineering(self, prob_type):
         if st.button("GO"):
             self.drop_cols()
             self.numerical_impute()
             self.categorical_impute()
             self.categorical_encoding()
             self.scale()
-            self.balance()
-            self.discretize()
+            if prob_type == "classification":
+                self.balance()
+                self.discretize()
             st.subheader("Transformed Data")
             st.write(self.raw_data.head())
 
@@ -328,7 +329,7 @@ class data_engineering_page():
         if prob_type == "classification":
             self.get_balance_strategy()
             self.get_discretize_strategy()
-        self.run_data_engineering()
+        self.run_data_engineering(prob_type)
 
 
 if __name__ == "__main__":

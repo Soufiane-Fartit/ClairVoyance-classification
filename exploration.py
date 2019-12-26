@@ -24,13 +24,14 @@ class exploration_page():
         self.unique_out = None
         self.x_axis = None
         self.y_axis = None
+        self.box_col = None
         self.scatter_rows = []
         self.corr_method = 'pearson'
         self.problem_type = session_state.problem_type
 
 
     def get_2_axis_viz(self):
-        st.subheader("2 axis visualization")
+        st.subheader("Joint plot")
         self.x_axis = st.selectbox("Choose a variable for the x-axis", self.raw_data.columns, index=3)
         self.y_axis = st.selectbox("Choose a variable for the y-axis", self.raw_data.columns, index=4)
 
@@ -55,14 +56,30 @@ class exploration_page():
         graph = alt.Chart(self.raw_data).mark_circle().encode(x=self.x_axis, y=self.y_axis)
         st.write(graph)
 
+    def joint_plot(self):
+        try:
+            sns.jointplot(x=self.raw_data[self.x_axis], y=self.raw_data[self.y_axis], kind="kde", palette="Blues")
+        except:
+            try:
+                sns.catplot(x=self.x_axis, y=self.y_axis, kind="swarm", data=self.raw_data, palette="Blues")
+            except:
+                st.error("something is wrong, please chose another column")
+        st.pyplot()
 
-    def scatter_matrix(self):
+
+    def scatter_matrix(self, prob_type):
         if len(self.scatter_rows) != 0:
-            g = sns.pairplot(self.raw_data[self.scatter_rows+[self.out_col]],
-                            vars = self.scatter_rows,
-                            hue = self.out_col,
-                            diag_kind = 'hist')
-            st.pyplot(g)
+            if prob_type == "classification":
+                g = sns.pairplot(self.raw_data[self.scatter_rows+[self.out_col]],
+                                vars = self.scatter_rows,
+                                hue = self.out_col,
+                                diag_kind = 'hist', palette="Blues")
+                st.pyplot(g)
+            else:
+                g = sns.pairplot(self.raw_data[self.scatter_rows+[self.out_col]],
+                                vars = self.scatter_rows,
+                                diag_kind = 'hist', palette="Blues")
+                st.pyplot(g)
         else:
             st.warning("select rows first")
 
@@ -82,24 +99,43 @@ class exploration_page():
 
         plt.figure()
         for i,x in enumerate(self.unique_out):
-            new_df = self.raw_data.loc[self.raw_data[self.out_col]==x][self.hist_col]
-            #hist, _ = np.histogram(new_df)
-            fig2 = sns.distplot(new_df, label=self.unique_out[i])
+            new_df = self.raw_data.loc[self.raw_data[self.out_col]==int(float(x))][self.hist_col]
+            sns.distplot(new_df, label=self.unique_out[i])
         st.pyplot()
 
-    def plot_corr_matrix(self):
+    def get_box_col(self):
+        st.subheader("Box plot")
+        self.box_col = st.selectbox('Which feature?',
+                                    self.raw_data.drop(self.out_col, axis=1)\
+                                    .columns)
+
+    def plot_box_altair(self):
+        graph = alt.Chart(self.raw_data).mark_boxplot().encode(x = self.box_col, y = self.out_col).properties(width=500,height=500)
+        st.write(graph)
+
+    def plot_box_seaborn(self):
         plt.figure()
+        if self.raw_data[self.box_col].nunique()<7:
+            sns.boxplot(x = self.box_col, y = self.out_col, data=self.raw_data)
+            st.pyplot()
+        else:
+            st.warning("feature contain too much unique values \n please choose another column")
+
+    def plot_corr_matrix(self):
+        plt.subplots(figsize=(20,15))
         sns.heatmap(self.raw_data\
                     .select_dtypes(exclude='object')\
                     .corr(self.corr_method),
-                    cmap="YlGnBu")
+                    cmap="Blues")
         st.pyplot()
+
 
     def plot_pca(self):
         st.subheader("PCA")
+        st.warning("This will ignore non numerical columns")
         from sklearn.decomposition import PCA
         pca = PCA(n_components=2)
-        X_res = self.raw_data.drop(self.out_col, axis=1)
+        X_res = self.raw_data.select_dtypes(exclude='object').drop(self.out_col, axis=1)
         y_res = self.raw_data[self.out_col]
         principalComponents = pca.fit_transform(X_res)
 
@@ -109,29 +145,33 @@ class exploration_page():
         finalDf = pd.concat([principalDf,
                             y_res],
                             axis = 1)
+        """
         plt.figure()
         graph = alt.Chart(finalDf)\
                     .mark_circle()\
                     .encode(x='principal component 1',
                             y='principal component 2',
-                            color=self.out_col+':N')
+                            color=self.out_col+':N')\
+                    .properties(width=500,
+                                height=500)
         st.write(graph)
+        """
+        plt.figure()
+        sns.scatterplot(x="principal component 1", y="principal component 2", hue=self.out_col, palette="Blues",data=finalDf)
+        st.pyplot()
 
 
     def routine(self, prob_type):
         self.get_2_axis_viz()
-        self.visualize_2_axis()
+        self.joint_plot()
         self.get_scatter_matrix_rows()
-        self.scatter_matrix()
+        self.scatter_matrix(prob_type)
         if prob_type == "classification":
             self.get_hist_col()
             self.plot_hist_m()
-            """
-            try:
-                self.plot_hist_m()
-            except:
-                pass
-            """
+        else:
+            self.get_box_col()
+            self.plot_box_seaborn()
         self.get_corr()
         self.plot_corr_matrix()
         self.plot_pca()
