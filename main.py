@@ -55,7 +55,7 @@ class clairevoyance():
         self.de_page = data_engineering_page(self.de_session_state)
         self.viz_page = exploration_page(self.viz_session_state)
         self.ml_page = ml_page(self.ml_session_state)
-        self.ml_reg_page = self.ml_reg_page(self.ml_session_state)
+        self.ml_reg_page = ml_reg_page(self.ml_session_state)
         self.problem_type = "classification"
 
     def switcher(self):
