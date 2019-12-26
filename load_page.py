@@ -103,14 +103,13 @@ class loading_page():
 
 
     def get_pred_column(self):
-        if self.problem_type=="classification":
-            if self.data_check:
-                self.out_col = st.selectbox('Select the column containing the predictions please',
-                                            self.raw_data.columns,
-                                            len(self.raw_data.columns)-1,
-                                            key = "out_col_selectbox")
-                self.out_col_check = st.button('select')
-                self.update_session(self.session_state)
+        if self.data_check:
+            self.out_col = st.selectbox('Select the column containing the predictions please',
+                                        self.raw_data.columns,
+                                        len(self.raw_data.columns)-1,
+                                        key = "out_col_selectbox")
+            self.out_col_check = st.button('select')
+            self.update_session(self.session_state)
 
 
     def get_unique_values(self):
@@ -126,7 +125,8 @@ class loading_page():
         self.show_infos_data()
         self.get_pred_column()
         self.get_unique_values()
-        self.show_data_balance()
+        if self.problem_type=="classification":
+            self.show_data_balance()
         self.show_infos_nan()
 
 if __name__ == "__main__":
