@@ -118,14 +118,14 @@ class loading_page():
             self.update_session(self.session_state)
 
 
-    def routine(self):
+    def routine(self, prob_type):
         self.get_path_or_link()
         self.load_data()
         self.show_raw_data()
         self.show_infos_data()
         self.get_pred_column()
         self.get_unique_values()
-        if self.problem_type=="classification":
+        if prob_type == "classification":
             self.show_data_balance()
         self.show_infos_nan()
 
