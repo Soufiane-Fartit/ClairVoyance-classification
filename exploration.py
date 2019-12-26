@@ -79,13 +79,12 @@ class exploration_page():
 
     def plot_hist_m(self):
         self.unique_out = list(map(str,self.raw_data[self.out_col].unique().tolist()))
-        st.write(self.unique_out)
 
         plt.figure()
         for i,x in enumerate(self.unique_out):
             new_df = self.raw_data.loc[self.raw_data[self.out_col]==x][self.hist_col]
-            hist, _ = np.histogram(new_df)
-            fig2 = sns.distplot(hist, color="blue", label=self.unique_out[i])
+            #hist, _ = np.histogram(new_df)
+            fig2 = sns.distplot(new_df, label=self.unique_out[i])
         st.pyplot()
 
     def plot_corr_matrix(self):
