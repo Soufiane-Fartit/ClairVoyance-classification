@@ -71,7 +71,7 @@ class data_engineering_page():
 
     def get_scale_strategy(self):
         st.title("Scaling Strategy")
-        self.scale_strategy = st.selectbox("encode strategy",
+        self.scale_strategy = st.selectbox("scaling strategy",
                                         ["None",
                                         "MinMaxScaler",
                                         "StandardScaler",

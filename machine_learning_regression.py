@@ -78,10 +78,9 @@ class ml_reg_page():
                 """
                 svc_predictions = svc.predict(X_test)
                 st.write('svc accuracy on test set',accuracy_score(svc_predictions, Y_test))
-
+                """
                 self.chosen_models_names.append('LinearSVR')
                 self.chosen_models.append(svc)
-                """
 
             elif alg == 'RidgeCV':
                 from sklearn.linear_model import RidgeCV
@@ -91,10 +90,10 @@ class ml_reg_page():
                 """
                 rid = rid.predict(X_test)
                 st.write('RidgeCV accuracy on test set',accuracy_score(rid_predictions, Y_test))
-
+                """
                 self.chosen_models_names.append('RidgeCV')
                 self.chosen_models.append(rid)
-                """
+
 
             elif alg == 'Random Forest Regressor':
                 from sklearn.ensemble import RandomForestRegressor
@@ -104,10 +103,11 @@ class ml_reg_page():
                 """
                 rfc_predictions = rfc.predict(X_test)
                 st.write('Random Forest Regressor accuracy on test set',accuracy_score(rfc_predictions, Y_test))
+                """
 
                 self.chosen_models_names.append('Random Forest Regressor')
                 self.chosen_models.append(rfc)
-                """
+
 
             elif alg == 'Adaboost':
                 from sklearn.ensemble import AdaBoostRegressor
@@ -117,10 +117,11 @@ class ml_reg_page():
                 """
                 ada_predictions = ada.predict(X_test)
                 st.write('ada accuracy on test set',accuracy_score(ada_predictions, Y_test))
+                """
 
                 self.chosen_models_names.append('Adaboost')
                 self.chosen_models.append(ada)
-                """
+
 
             elif alg == 'XGBoost':
                 import xgboost as xgb
@@ -130,10 +131,9 @@ class ml_reg_page():
                 """
                 xgb_predictions = xgb.predict(X_test)
                 st.write('xgb accuracy on test set',accuracy_score(xgb_predictions, Y_test))
-
+                """
                 self.chosen_models_names.append('XGBoost')
                 self.chosen_models.append(xgb)
-                """
 
         if self.meta_model_check:
             if self.meta_model_type == "voting":
@@ -182,7 +182,7 @@ class ml_reg_page():
             if alg == 'LinearSVR':
                 from sklearn.svm import LinearSVR
                 svc = LinearSVR()
-                svc_scores = cross_val_score(svc, X_train, Y_train, scoring='neg_mean_squared_error', cv = self.k_cv)
+                svc_scores = cross_val_score(svc, X_train, Y_train, scoring='r2', cv = self.k_cv)
                 st.write('LinearSVR score :', svc_scores.mean())
 
                 self.chosen_models_names.append('LinearSVR')
@@ -191,7 +191,7 @@ class ml_reg_page():
             elif alg == 'RidgeCV':
                 from sklearn.linear_model import RidgeCV
                 rid = RidgeCV()
-                rid_scores = cross_val_score(rid, X_train, Y_train, scoring='neg_mean_squared_error', cv = self.k_cv)
+                rid_scores = cross_val_score(rid, X_train, Y_train, scoring='r2', cv = self.k_cv)
                 st.write('RidgeCV score :', rid_scores.mean())
 
                 self.chosen_models_names.append('RidgeCV')
@@ -200,7 +200,7 @@ class ml_reg_page():
             elif alg == 'Random Forest Regressor':
                 from sklearn.ensemble import RandomForestRegressor
                 rfc = RandomForestRegressor()
-                rfc_scores = cross_val_score(rfc, X_train, Y_train, scoring='neg_mean_squared_error', cv = self.k_cv)
+                rfc_scores = cross_val_score(rfc, X_train, Y_train, scoring='r2', cv = self.k_cv)
                 st.write('Random Forest Regressor score :', rfc_scores.mean())
 
                 self.chosen_models_names.append('Random Forest Regressor')
@@ -209,7 +209,7 @@ class ml_reg_page():
             elif alg == 'Adaboost':
                 from sklearn.ensemble import AdaBoostRegressor
                 ada = AdaBoostRegressor()
-                ada_scores = cross_val_score(ada, X_train, Y_train, scoring='neg_mean_squared_error', cv = self.k_cv)
+                ada_scores = cross_val_score(ada, X_train, Y_train, scoring='r2', cv = self.k_cv)
                 st.write('Adaboost score :', ada_scores.mean())
 
                 self.chosen_models_names.append('Adaboost')
@@ -218,7 +218,7 @@ class ml_reg_page():
             elif alg == 'XGBoost':
                 import xgboost as xgb
                 xgb = xgb.XGBRegressor(n_estimators=300)
-                xgb_scores = cross_val_score(xgb, X_train, Y_train, scoring='neg_mean_squared_error', cv = self.k_cv)
+                xgb_scores = cross_val_score(xgb, X_train, Y_train, scoring='r2', cv = self.k_cv)
                 st.write('xgb score :', xgb_scores.mean())
 
                 self.chosen_models_names.append('XGBoost')
@@ -228,7 +228,7 @@ class ml_reg_page():
             if self.meta_model_type == "voting":
                 from sklearn.ensemble import VotingRegressor
                 stack = VotingRegressor(estimators=list(zip(self.chosen_models_names,self.chosen_models)))
-                stack_scores = cross_val_score(stack, X_train, Y_train, scoring='neg_mean_squared_error', cv = self.k_cv)
+                stack_scores = cross_val_score(stack, X_train, Y_train, scoring='r2', cv = self.k_cv)
                 st.write('voting score :', stack_scores.mean())
 
             else:
@@ -242,7 +242,7 @@ class ml_reg_page():
                     from sklearn.ensemble import RandomForestRegressor
                     stack = StackingRegressor(estimators=list(zip(self.chosen_models_names,self.chosen_models)), final_estimator=RandomForestRegressor())
 
-                stack_scores = cross_val_score(stack, X_train, Y_train, scoring='neg_mean_squared_error', cv = self.k_cv)
+                stack_scores = cross_val_score(stack, X_train, Y_train, scoring='r2', cv = self.k_cv)
                 st.write(self.meta_model+' stack score using cv :', stack_scores.mean())
 
 
