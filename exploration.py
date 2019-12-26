@@ -77,15 +77,16 @@ class exploration_page():
         fig2 = sns.distplot(new_df_1, color="red", label=self.unique_out[1])
         st.pyplot()
 
-    def plot_hist_m(self, unique_values):
-        new_df = [self.raw_data.loc[self.raw_data[self.out_col]==x ][self.hist_col] for x in unique_values]
+    def plot_hist_m(self):
+        self.unique_out = list(map(str,self.raw_data[self.out_col].unique().tolist()))
+
+        new_df = [self.raw_data.loc[self.raw_data[self.out_col]==x ][self.hist_col] for x in self.unique_out]
         H = []
         for x in new_df:
             hist, _ = np.histogram(x)
             H.append(hist)
 
         plt.figure()
-        self.unique_out = list(map(str,self.raw_data[self.out_col].unique().tolist()))
         for i,h in enumerate(H):
             fig2 = sns.distplot(h, color="blue", label=self.unique_out[i])
 
@@ -122,7 +123,7 @@ class exploration_page():
         st.write(graph)
 
 
-    def routine(self, prob_type, unique_values):
+    def routine(self, prob_type):
         self.get_2_axis_viz()
         self.visualize_2_axis()
         self.get_scatter_matrix_rows()
