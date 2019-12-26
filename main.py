@@ -66,7 +66,10 @@ class clairevoyance():
 
     def go_to_load(self):
         if self.tab == 'Data Loading':
-            self.load_page.routine()
+            if self.problem_type == "classification":
+                self.load_page.routine()
+            if self.problem_type == "regression":
+                self.load_page.routine()
 
     def go_to_de(self):
         if self.tab == 'Data Engineering':
