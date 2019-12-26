@@ -320,13 +320,14 @@ class data_engineering_page():
             st.write(self.raw_data.head())
 
 
-    def routine(self):
+    def routine(self, prob_type):
         self.get_col_to_drop()
         self.get_impute_strategy()
         self.get_encode_strategy()
         self.get_scale_strategy()
-        self.get_balance_strategy()
-        self.get_discretize_strategy()
+        if prob_type == "classification":
+            self.get_balance_strategy()
+            self.get_discretize_strategy()
         self.run_data_engineering()
 
 
