@@ -23,6 +23,7 @@ class loading_page():
         self.unique_values = session_state.unique_values
         self.selected_filename = session_state.selected_filename
         self.out_col_check = session_state.out_col_check
+        self.problem_type = session_state.problem_type
 
     def update_session(self, session_state):
         session_state.link = self.link
@@ -102,13 +103,14 @@ class loading_page():
 
 
     def get_pred_column(self):
-        if self.data_check:
-            self.out_col = st.selectbox('Select the column containing the predictions please',
-                                        self.raw_data.columns,
-                                        len(self.raw_data.columns)-1,
-                                        key = "out_col_selectbox")
-            self.out_col_check = st.button('select')
-            self.update_session(self.session_state)
+        if self.problem_type=="classification":
+            if self.data_check:
+                self.out_col = st.selectbox('Select the column containing the predictions please',
+                                            self.raw_data.columns,
+                                            len(self.raw_data.columns)-1,
+                                            key = "out_col_selectbox")
+                self.out_col_check = st.button('select')
+                self.update_session(self.session_state)
 
 
     def get_unique_values(self):
