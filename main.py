@@ -44,10 +44,12 @@ class clairevoyance():
                                                 cat_impute_strategy=session_state.cat_impute_strategy,
                                                 encode_strategy=session_state.encode_strategy,
                                                 scale_strategy=session_state.scale_strategy,
-                                                balance_strategy=session_state.balance_strategy)
+                                                balance_strategy=session_state.balance_strategy,
+                                                problem_type = session_state.problem_type)
 
         self.viz_session_state = SessionState.get(raw_data = session_state.raw_data,
-                                                out_col=session_state.out_col)
+                                                out_col=session_state.out_col,
+                                                problem_type = session_state.problem_type)
 
         self.ml_session_state = SessionState.get(raw_data = session_state.raw_data,
                                                 out_col=session_state.out_col)
@@ -60,16 +62,19 @@ class clairevoyance():
         self.problem_type = session_state.problem_type
 
     def switcher(self):
-        st.sidebar.title("ClairVoyance - classification&regression")
+        st.sidebar.title("ClairVoyance - classification/regression")
         self.problem_type = st.sidebar.selectbox("type of problem", ["classification", "regression"])
         self.tab = st.sidebar.radio('Pick an option', ['Data Loading', 'Data Engineering', 'Data Exploration', 'Machine Learning'])
 
     def go_to_load(self):
         if self.tab == 'Data Loading':
+            self.load_page.routine(self.problem_type)
+            """
             if self.problem_type == "classification":
                 self.load_page.routine("classification")
             if self.problem_type == "regression":
                 self.load_page.routine("regression")
+            """
 
     def go_to_de(self):
         if self.tab == 'Data Engineering':

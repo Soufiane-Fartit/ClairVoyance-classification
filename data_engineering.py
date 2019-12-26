@@ -21,6 +21,7 @@ class data_engineering_page():
         self.discretize_bins_number = 7
         self.scale_strategy = session_state.scale_strategy
         self.balance_strategy = session_state.balance_strategy
+        self.problem_type = session_state.problem_type
 
 
     def update_session(self, session_state):

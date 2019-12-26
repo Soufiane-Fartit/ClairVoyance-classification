@@ -26,6 +26,7 @@ class exploration_page():
         self.y_axis = None
         self.scatter_rows = []
         self.corr_method = 'pearson'
+        self.problem_type = session_state.problem_type
 
 
     def get_2_axis_viz(self):
@@ -48,7 +49,7 @@ class exploration_page():
     def get_corr(self):
         st.subheader("Correlation Matrix")
         self.corr_method = st.selectbox('correlation method :', ['pearson', 'kendall', 'spearman'])
-        
+
 
     def visualize_2_axis(self):
         graph = alt.Chart(self.raw_data).mark_circle().encode(x=self.x_axis, y=self.y_axis)
