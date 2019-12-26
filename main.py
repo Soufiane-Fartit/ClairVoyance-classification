@@ -36,7 +36,7 @@ class clairevoyance():
                                                 unique_values = session_state.unique_values,
                                                 selected_filename = session_state.selected_filename,
                                                 out_col_check = session_state.out_col_check,
-                                                problem_type == self.problem_type)
+                                                problem_type = self.problem_type)
 
         self.de_session_state = SessionState.get(raw_data=session_state.raw_data,
                                                 out_col=session_state.out_col,
