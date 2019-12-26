@@ -80,13 +80,13 @@ class exploration_page():
     def plot_hist_m(self):
         self.unique_out = list(map(str,self.raw_data[self.out_col].unique().tolist()))
 
-        new_df = [self.raw_data.loc[self.raw_data[self.out_col]==x ][self.hist_col] for x in self.unique_out]
         H = []
-        for x in new_df:
-            hist, _ = np.histogram(x)
-            H.append(hist)
-
         plt.figure()
+        for x in self.unique_out:
+            new_df = self.raw_data.loc[self.raw_data[self.out_col]==x][self.hist_col]
+            hist, _ = np.histogram(new_df)
+            H.append(new_df)
+
         for i,h in enumerate(H):
             fig2 = sns.distplot(h, color="blue", label=self.unique_out[i])
 
@@ -130,10 +130,13 @@ class exploration_page():
         self.scatter_matrix()
         if prob_type == "classification":
             self.get_hist_col()
+            self.plot_hist_m()
+            """
             try:
                 self.plot_hist_m()
             except:
                 pass
+            """
         self.get_corr()
         self.plot_corr_matrix()
         self.plot_pca()
