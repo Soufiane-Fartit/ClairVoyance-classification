@@ -7,6 +7,7 @@ from load_page import loading_page
 from data_engineering import data_engineering_page
 from exploration import exploration_page
 from machine_learning import ml_page
+from machine_learning_regression import ml_reg_page
 
 import numpy as np
 import pandas as p
@@ -54,9 +55,12 @@ class clairevoyance():
         self.de_page = data_engineering_page(self.de_session_state)
         self.viz_page = exploration_page(self.viz_session_state)
         self.ml_page = ml_page(self.ml_session_state)
+        self.ml_reg_page = self.ml_reg_page(self.ml_session_state)
+        self.problem_type = "classification"
 
     def switcher(self):
         st.sidebar.title("ClairVoyance - classification")
+        self.problem_type = st.selectbox("type of problem", ["classification", "regression"])
         self.tab = st.sidebar.radio('Pick an option', ['Data Loading', 'Data Engineering', 'Data Exploration', 'Machine Learning'])
 
     def go_to_load(self):
@@ -73,7 +77,10 @@ class clairevoyance():
 
     def go_to_ml(self):
         if self.tab == 'Machine Learning':
-            self.ml_page.routine()
+            if self.problem_type == "classification":
+                self.ml_page.routine()
+            if self.problem_type == "regression":
+                self.ml_reg_page.routine()
 
     def routine(self):
         self.switcher()
