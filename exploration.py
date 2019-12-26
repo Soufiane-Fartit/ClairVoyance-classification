@@ -108,16 +108,17 @@ class exploration_page():
         st.write(graph)
 
 
-    def routine(self):
+    def routine(self, prob_type):
         self.get_2_axis_viz()
         self.visualize_2_axis()
         self.get_scatter_matrix_rows()
         self.scatter_matrix()
-        self.get_hist_col()
-        try:
-            self.plot_hist()
-        except:
-            pass
+        if prob_type == "classification":
+            self.get_hist_col()
+            try:
+                self.plot_hist()
+            except:
+                pass
         self.get_corr()
         self.plot_corr_matrix()
         self.plot_pca()
