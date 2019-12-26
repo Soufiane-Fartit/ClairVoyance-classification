@@ -76,7 +76,7 @@ class clairevoyance():
 
     def go_to_viz(self):
         if self.tab == 'Data Exploration':
-            self.viz_page.routine(self.problem_type)
+            self.viz_page.routine(self.problem_type, unique_values)
 
     def go_to_ml(self):
         if self.tab == 'Machine Learning':

@@ -77,6 +77,20 @@ class exploration_page():
         fig2 = sns.distplot(new_df_1, color="red", label=self.unique_out[1])
         st.pyplot()
 
+    def plot_hist_m(self, unique_values):
+        new_df = [self.raw_data.loc[self.raw_data[self.out_col]==x ][self.hist_col] for x in unique_values]
+        H = []
+        for x in new_df:
+            hist, _ = np.histogram(x)
+            H.append(hist)
+
+        plt.figure()
+        self.unique_out = list(map(str,self.raw_data[self.out_col].unique().tolist()))
+        for i,h in enumerate(H):
+            fig2 = sns.distplot(h, color="blue", label=self.unique_out[i])
+
+        st.pyplot()
+
     def plot_corr_matrix(self):
         plt.figure()
         sns.heatmap(self.raw_data\
@@ -108,7 +122,7 @@ class exploration_page():
         st.write(graph)
 
 
-    def routine(self, prob_type):
+    def routine(self, prob_type, unique_values):
         self.get_2_axis_viz()
         self.visualize_2_axis()
         self.get_scatter_matrix_rows()
@@ -116,7 +130,7 @@ class exploration_page():
         if prob_type == "classification":
             self.get_hist_col()
             try:
-                self.plot_hist()
+                self.plot_hist_m()
             except:
                 pass
         self.get_corr()
