@@ -138,7 +138,7 @@ class ml_reg_page():
         if self.meta_model_check:
             if self.meta_model_type == "voting":
                 from sklearn.ensemble import VotingRegressor
-                stack = VotingRegressor(estimators=list(zip(self.chosen_models_names,self.chosen_models)), voting='hard')
+                stack = VotingRegressor(estimators=list(zip(self.chosen_models_names,self.chosen_models)))
                 stack.fit(X_train, Y_train)
                 st.write("stack score", stack.score(X_test, Y_test))
                 """
@@ -227,7 +227,7 @@ class ml_reg_page():
         if self.meta_model_check:
             if self.meta_model_type == "voting":
                 from sklearn.ensemble import VotingRegressor
-                stack = VotingRegressor(estimators=list(zip(self.chosen_models_names,self.chosen_models)), voting='hard')
+                stack = VotingRegressor(estimators=list(zip(self.chosen_models_names,self.chosen_models)))
                 stack_scores = cross_val_score(stack, X_train, Y_train, scoring='neg_mean_squared_error', cv = self.k_cv)
                 st.write('voting score :', stack_scores.mean())
 
