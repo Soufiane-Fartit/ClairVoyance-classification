@@ -24,7 +24,9 @@ import os
 class clairevoyance():
     def __init__(self, session_state):
         self.tab = "Data Loading"
-        self.loading_session_state = SessionState.get(link = session_state.link,
+        self.loading_session_state = SessionState.get(file = session_state.file,
+                                                file_button = session_state.file_button,
+                                                link = session_state.link,
                                                 path = session_state.path,
                                                 path_button = session_state.path_button,
                                                 link_button = session_state.link_button,
@@ -103,7 +105,9 @@ class clairevoyance():
 
 if __name__ == "__main__":
 
-    session_state = SessionState.get(link = "",
+    session_state = SessionState.get(file = None,
+                                    file_button = None,
+                                    link = "",
                                     path = "",
                                     path_button = None,
                                     link_button = None,

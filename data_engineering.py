@@ -36,7 +36,7 @@ class data_engineering_page():
 
     def get_col_to_drop(self):
         st.title('Dropping columns')
-        self.to_drop = st.multiselect('Columns to drop?', self.session_state.raw_data.columns)
+        self.to_drop = st.multiselect('Columns to drop?', self.session_state.raw_data.drop(self.out_col,axis=1).columns)
 
     def get_impute_strategy(self):
         st.title("Impute Strategy")
@@ -208,7 +208,7 @@ class data_engineering_page():
             self.update_session(self.session_state)
 
     def categorical_encoding(self):
-        categorical = self.raw_data.select_dtypes(include='object')
+        categorical = self.raw_data.drop(self.out_col,axis=1).select_dtypes(include='object')
 
         if self.encode_strategy == "None":
             pass
@@ -224,7 +224,7 @@ class data_engineering_page():
         elif self.encode_strategy == "Label Encoding":
             from sklearn.preprocessing import LabelEncoder
             le = LabelEncoder()
-            self.raw_data = self.raw_data.apply(le.fit_transform)
+            self.raw_data = self.merge_data(self.raw_data.drop(self.out_col,axis=1).apply(le.fit_transform), self.raw_data[self.out_col])
             """
             categorical_enc = le.fit_transform(categorical)
             categorical_enc = pd.DataFrame(categorical_enc.toarray())

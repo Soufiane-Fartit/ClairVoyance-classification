@@ -123,7 +123,7 @@ class ml_reg_page():
                 from sklearn.ensemble import VotingRegressor
                 stack = VotingRegressor(estimators=list(zip(self.chosen_models_names,self.chosen_models)))
                 stack.fit(X_train, Y_train)
-                st.write("stack score", stack.score(X_test, Y_test))
+                st.write("voting score", stack.score(X_test, Y_test))
 
             else:
                 from sklearn.ensemble import StackingRegressor
@@ -138,7 +138,7 @@ class ml_reg_page():
 
                 stack.fit(X_train, Y_train)
                 st.write("stack score", stack.score(X_test, Y_test))
-                
+
 
     def train_algs_cv(self):
         st.subheader("Results using cross validation")

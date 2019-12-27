@@ -165,7 +165,11 @@ class exploration_page():
         self.get_2_axis_viz()
         self.joint_plot()
         self.get_scatter_matrix_rows()
-        self.scatter_matrix(prob_type)
+        try:
+            self.scatter_matrix(prob_type)
+        except:
+            st.warning("something is wrong, can't plot scatter matrix")
+        
         if prob_type == "classification":
             self.get_hist_col()
             self.plot_hist_m()

@@ -12,6 +12,8 @@ class loading_page():
     def __init__(self,session_state):
 
         self.session_state = session_state
+        self.file = session_state.file
+        self.file_button = session_state.file_button
         self.link = session_state.link
         self.path = session_state.path
         self.path_button = session_state.path_button
@@ -26,6 +28,8 @@ class loading_page():
         self.problem_type = session_state.problem_type
 
     def update_session(self, session_state):
+        session_state.file = self.file
+        session_state.file_button = self.file_button
         session_state.link = self.link
         session_state.path = self.path
         session_state.path_button = self.path_button
@@ -54,6 +58,8 @@ class loading_page():
 
 
     def load_data(self):
+        if self.file_button:
+            self.load_data_from_path_or_link(self.file)
         if self.link_button:
             self.load_data_from_path_or_link(self.link)
         if self.path_button:
@@ -62,7 +68,9 @@ class loading_page():
 
 
     def get_path_or_link(self):
-        self.link = st.text_input("link to dataframe", "Churn_Modelling.csv")
+        self.file = st.file_uploader("Upload a file from your computer", type=["csv"])
+        self.file_button = st.button('Load local data')
+        self.link = st.text_input("or provide a link to dataframe", "")
         self.link_button = st.button('Load data')
         self.path = self.file_selector()
         self.path_button = st.button('Load demo data')
