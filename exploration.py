@@ -168,8 +168,9 @@ class exploration_page():
         try:
             self.scatter_matrix(prob_type)
         except:
-            st.warning("something is wrong, can't plot scatter matrix")
-        
+            self.scatter_matrix(prob_type)
+            #st.warning("something is wrong, can't plot scatter matrix")
+
         if prob_type == "classification":
             self.get_hist_col()
             self.plot_hist_m()
