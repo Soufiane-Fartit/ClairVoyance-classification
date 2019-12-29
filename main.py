@@ -22,6 +22,7 @@ import os
 
 
 class clairevoyance():
+    
     """
 
     The core of the application
@@ -100,6 +101,13 @@ class clairevoyance():
                 self.ml_reg_page.routine()
 
     def routine(self):
+
+        """
+
+        THE LOOP THAT STREAMLIT WILL BE EXECUTING
+
+        """
+
         self.switcher()
         self.go_to_load()
         self.go_to_de()

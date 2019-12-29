@@ -8,6 +8,13 @@ import os
 
 class loading_page():
 
+    """
+
+    THIS CLASS CONTROL THE LOADING PAGE WHERE THE USER CHOSES A DATASET
+    AND INSPECT IT. IT GIVES A FEW INFORMATIONS ABOUT THE COLUMNS AND THE
+    MISSING VALUES AND IN CASE OF A CLASSIFICATION PROBLEM, THE DATA BALANCE
+
+    """
 
     def __init__(self,session_state):
 
@@ -28,6 +35,13 @@ class loading_page():
         self.problem_type = session_state.problem_type
 
     def update_session(self, session_state):
+
+        """
+
+        SAVE THE STATE OF THE CLASS IN THE SESSION_STATE
+
+        """
+
         session_state.file = self.file
         session_state.file_button = self.file_button
         session_state.link = self.link
@@ -45,12 +59,28 @@ class loading_page():
 
 
     def file_selector(self, folder_path='.'):
+
+        """
+
+        THIS IS A TEMPORARY WORKAOURND OF A FILE_SELECtOR PROVIDED BY
+        ONE OF THE CREATORS OF STREAMLIT ONLINE
+
+        """
+
         filenames = os.listdir(folder_path)
         self.selected_filename = st.selectbox('or select a demo file', list(filter(lambda k: 'csv' in k, filenames)))
         return os.path.join(folder_path, self.selected_filename)
 
 
     def load_data_from_path_or_link(self, path):
+
+        """
+
+        TAKES A PATH (SERVER OR USER) OR A LINE TO A DATASET
+        AND LOAD THE DATA
+
+        """
+
         self.data_load_state = st.text('Loading dataset...')
         self.raw_data = pd.read_csv(path, nrows=10000, index_col=False)
         #self.raw_data = pd.read_csv(path, nrows=10000, sep= ';|,', index_col=False)
@@ -59,6 +89,13 @@ class loading_page():
 
 
     def load_data(self):
+
+        """
+
+        CHECKS WICH BUTTON HAVE BEEN PRESSED AND LOAD THE DATA ACCORDINLY
+
+        """
+
         if self.file_button:
             self.load_data_from_path_or_link(self.file)
         if self.link_button:
@@ -69,6 +106,13 @@ class loading_page():
 
 
     def get_path_or_link(self):
+
+        """
+
+        asks the user to chose how to upload data (from the users computer, or from an online dataset, or a demo dataset that we have provided)
+
+        """
+
         self.file = st.file_uploader("Upload a file from your computer", type=["csv"])
         self.file_button = st.button('Load local data')
         self.link = st.text_input("or provide a link to dataframe", "")
@@ -79,6 +123,13 @@ class loading_page():
 
 
     def show_raw_data(self):
+
+        """
+
+        PRINT THE 5 FIRST ROWS OF THE DATASET FOR INSPECTION PURPOSES
+
+        """
+
         st.subheader('Raw data')
         st.write(self.data_check)
         if self.data_check:
@@ -88,6 +139,13 @@ class loading_page():
 
 
     def show_data_balance(self):
+
+        """
+
+        PRINTS INFORMATION ABOUT THE NUMBER OF INSTANCES OF EACH CLASS
+
+        """
+
         st.subheader('Data balance')
         if self.out_col_check:
             st.table(self.raw_data[self.out_col].value_counts())
@@ -96,6 +154,14 @@ class loading_page():
 
 
     def show_infos_data(self):
+
+        """
+
+        PRINTS THE INFORMATIONS OF THE DATA GIVEN BY THE PANDAS DESCRIBE FUNCTION
+        (MEAN, STD, MIN, MAX ...)
+
+        """
+
         st.subheader('Infos about data')
         if self.data_check:
             st.dataframe(self.raw_data.describe())
@@ -104,6 +170,13 @@ class loading_page():
 
 
     def show_infos_nan(self):
+
+        """
+
+        PRINTS THE NUMBER OF MISSING VALUES OF EACH COLUMN
+
+        """
+
         st.subheader('Infos about missing values')
         if self.data_check:
             st.table(self.raw_data.isna().sum())
@@ -112,6 +185,11 @@ class loading_page():
 
 
     def get_pred_column(self):
+
+        #ASK THE USER FOR THE COLUMN CONTAINING THE PREDICTION VALUES
+        #THE LAST COLUMN IS SELECTED BY DEFAULT, AND ONLY CHANGED IF
+        #THE USER SPECIFIES OTHERWISE
+
         if self.data_check:
             self.out_col = st.selectbox('Select the column containing the predictions please',
                                         self.raw_data.columns,
@@ -122,12 +200,26 @@ class loading_page():
 
 
     def get_unique_values(self):
+
+        """
+
+        CALCULATE THE UNIQUE VALUES OF THE PREDICTIONS COLUMN
+
+        """
+
         if self.data_check:
             self.unique_values = list(map(str,self.raw_data[self.out_col].unique().tolist()))
             self.update_session(self.session_state)
 
 
     def routine(self, prob_type):
+
+        """
+
+        THE LOOP THAT STREAMLIT WILL BE EXECUTING
+
+        """
+
         self.get_path_or_link()
         self.load_data()
         self.show_raw_data()

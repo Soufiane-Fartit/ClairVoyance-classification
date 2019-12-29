@@ -11,12 +11,13 @@ class data_engineering_page():
 
     """
 
-    This class provides the necessary tools to clean the data: impute, encode, SMOTE, scale, discretize
+    THIS CLASS PROVIDES THE NECESSARY TOOLS TO CLEAN THE DATA: IMPUTE, ENCODE, SMOTE, SCALE, DISCRETIZE
 
     """
 
 
     def __init__(self,session_state):
+
         self.session_state = session_state
         self.raw_data = session_state.raw_data
         self.out_col = session_state.out_col
@@ -31,6 +32,13 @@ class data_engineering_page():
 
 
     def update_session(self, session_state):
+
+        """
+
+        UP-DATE THE SESSION_STATE WlTH THE SELF ATTRIBUTES
+
+        """
+
         session_state.raw_data = self.raw_data
         session_state.to_drop = self.to_drop
         session_state.num_impute_strategy = self.num_impute_strategy
@@ -41,10 +49,25 @@ class data_engineering_page():
 
 
     def get_col_to_drop(self):
+
+        """
+
+        ASKS THE USER OF THEY WANT TO DROP ANY COLUMN OF THE DATASET
+
+        """
+
         st.title('Dropping columns')
         self.to_drop = st.multiselect('Columns to drop?', self.session_state.raw_data.drop(self.out_col,axis=1).columns)
 
     def get_impute_strategy(self):
+
+        """
+
+        ASKS THE USER ABOUT HOW THEY WANT TO FILL MISSING VALUES
+        FOR BOTH NUMERICAL AND CATEGORICAL COLUMNS
+
+        """
+
         st.title("Impute Strategy")
         self.num_impute_strategy = st.selectbox("numerical data imputing strategy",
                                             ["None",
@@ -64,6 +87,13 @@ class data_engineering_page():
 
 
     def get_encode_strategy(self):
+
+        """
+
+        ASKS THE USER ABOUT HOW THEY WANT TO ENCODE CATEGORICAL COLUMNS
+
+        """
+
         st.title("Categorical Data Encoding Strategy")
         self.encode_strategy = st.selectbox("encode strategy",
                                         ["None",
@@ -71,12 +101,26 @@ class data_engineering_page():
                                         "Label Encoding"])
 
     def get_discretize_strategy(self):
+
+        """
+
+        ASKS THE USER IF THEY WANT TO DISCRETIZE ANY COLUMN, AND THE NUMBER OF BINS TO USE
+
+        """
+
         st.title("Discretizing Strategy")
         st.warning("The discretization happens after the scaling,\n the output will be ordinal high values: [1,2,3,...] ")
         self.discretize_bins_number = st.slider("number of bins", 2,15,7,1)
         self.discretize_cols = st.multiselect("discretize the following columns", self.raw_data.columns)
 
     def get_scale_strategy(self):
+
+        """
+
+        ASKS THE USER ABOUT HOW THEY WANT TO SCALE THE DATA
+
+        """
+
         st.title("Scaling Strategy")
         self.scale_strategy = st.selectbox("scaling strategy",
                                         ["None",
@@ -87,13 +131,36 @@ class data_engineering_page():
 
 
     def get_balance_strategy(self):
+
+        """
+
+        ASKS THE USER IF THEY WANT TO FIX THE DATA IMBALANCE
+        ONLY IN CASE OF A CLASSIFICATION PROBLEM
+
+        """
+
         st.title("Balance Strategy")
         self.balance_strategy = st.selectbox("upsample data using SMOTE ?", ["No", "Yes"])
 
     def merge_data(self,categorical_encoded, numerical_filled):
-    	return pd.concat([categorical_encoded, numerical_filled], axis = 1)
+
+        """
+
+        CONCATENATE 2 DATAFRAMES ON THE COLUMNS AXIS
+
+        """
+
+        return pd.concat([categorical_encoded, numerical_filled], axis = 1)
 
     def show_data_balance(self):
+
+        """
+
+        PRINTS THE NUMBER OF INSTANCES FOR EACH CLASS
+        ONLY IN CASE OF CLASSIFICATION
+
+        """
+
         st.subheader('Data balance')
         if self.out_col != None:
             st.table(self.raw_data[self.out_col].value_counts())
@@ -101,6 +168,14 @@ class data_engineering_page():
             st.warning("please select the output column (classification problems)")
 
     def summary(self):
+
+        """
+
+        PRINT A SUMMARY OF THE USERS CHOICES
+        THIS FUNCTION IS ONLY USED FOR DEBUGGING
+
+        """
+
         st.title("Summary")
         st.write(self.to_drop)
         st.write(self.num_impute_strategy)
@@ -111,11 +186,24 @@ class data_engineering_page():
 
 
     def drop_cols(self):
+
+        """
+
+        DROPS THE COLUMNS THAT THE USER ASKED FOR TO BE DROPED
+
+        """
+
         self.raw_data.drop(self.to_drop, axis=1, inplace=True)
         self.update_session(self.session_state)
 
 
     def numerical_impute(self):
+
+        """
+
+        FILL MISSING VALUES OF NUMERICAL COLUMNS
+
+        """
 
         numerical = self.raw_data.select_dtypes(exclude='object')
 
@@ -172,6 +260,13 @@ class data_engineering_page():
 
 
     def categorical_impute(self):
+
+        """
+
+        FILL MISSING VALUES OF CATEGORICAL COLUMNS
+
+        """
+
         categorical = self.raw_data.select_dtypes(include='object')
 
         if self.cat_impute_strategy == "None":
@@ -240,6 +335,14 @@ class data_engineering_page():
 
 
     def scale(self):
+
+        """
+
+        SCALE THE DATASET USING THE SCALER CHOSEN BY THE USER
+        NOTE: DATA SHOULD BE ENCODED BEFORE SCALING
+
+        """
+
         if self.scale_strategy == "None":
             pass
 
@@ -285,6 +388,13 @@ class data_engineering_page():
 
 
     def balance(self):
+
+        """
+
+        USES SMOTE TO GENERATE SYNTHETIC DATA FOR LESS PRESENT CLASSES
+
+        """
+
         if self.balance_strategy == "No":
             pass
         else:
@@ -304,6 +414,14 @@ class data_engineering_page():
             self.show_data_balance()
 
     def discretize(self):
+
+        """
+
+        DISCRETIZE A CONTINUOUS VALUES COLUMN INTO N VALUES
+        THE NUMBER N IS LEFT TO THE USER TO CHOOSE
+
+        """
+
         if len(self.discretize_cols) != 0:
             from sklearn.preprocessing import KBinsDiscretizer
             st.write(self.discretize_cols)
@@ -314,6 +432,13 @@ class data_engineering_page():
 
 
     def run_data_engineering(self, prob_type):
+
+        """
+
+        RUNS THE EXECUTION PART OF THE ROUTINE FUNCTION
+
+        """
+
         if st.button("GO"):
             self.drop_cols()
             self.numerical_impute()
@@ -328,6 +453,13 @@ class data_engineering_page():
 
 
     def routine(self, prob_type):
+
+        """
+
+        THE LOOP THAT STREAMLIT WILL BE EXECUTING
+
+        """
+
         self.get_col_to_drop()
         self.get_impute_strategy()
         self.get_encode_strategy()

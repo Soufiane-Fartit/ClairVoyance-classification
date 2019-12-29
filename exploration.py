@@ -16,8 +16,14 @@ import functools
 
 class exploration_page():
 
+    """
+
+    THIS CLASS IS DEDICATED TO THE VISUALIZATION OF THE DATASET 
+
+    """
 
     def __init__(self,session_state):
+
         self.session_state = session_state
         self.raw_data = session_state.raw_data
         self.out_col = session_state.out_col
@@ -31,32 +37,74 @@ class exploration_page():
 
 
     def get_2_axis_viz(self):
+
+        """
+
+        ASKS THE USER FOR THE COLUMNS TO INCLUDE IN THE visualize_2_axis/joint_plot PLOTS
+
+        """
+
         st.subheader("Joint plot")
         self.x_axis = st.selectbox("Choose a variable for the x-axis", self.raw_data.columns, index=3)
         self.y_axis = st.selectbox("Choose a variable for the y-axis", self.raw_data.columns, index=4)
 
 
     def get_scatter_matrix_rows(self):
+
+        """
+
+        ASKS THE USER FOR THE COLUMNS TO INCLUDE IN THE SCATTER_MATRIX PLOT
+
+        """
+
         st.subheader("scatter matrix")
         self.scatter_rows = st.multiselect('rows for the scatter matrix',
                                         self.raw_data.columns)
 
     def get_hist_col(self):
+
+        """
+
+        ASKS THE USER FOR THE COLUMN THE WANT TO SEE A HISTOGRAM OF
+
+        """
+
         st.subheader("histogram")
         self.hist_col = st.selectbox('Which feature?',
                                     self.raw_data\
                                     .select_dtypes(exclude='object')\
                                     .columns)
     def get_corr(self):
+
+        """
+
+        ASKS THE USER FOR THE METHOD TO CALCULATE THE CORRELATION BETWEEN THE COLUMNS
+
+        """
+
         st.subheader("Correlation Matrix")
         self.corr_method = st.selectbox('correlation method :', ['pearson', 'kendall', 'spearman'])
 
 
     def visualize_2_axis(self):
+
+        """
+
+        THIS FUNCTION WAS REPLACeD BY joint_plot
+
+        """
+
         graph = alt.Chart(self.raw_data).mark_circle().encode(x=self.x_axis, y=self.y_axis)
         st.write(graph)
 
     def joint_plot(self):
+
+        """
+
+        A JOINT_PLOT OF 2 COLUMNS CHOSEN BY THE USER
+
+        """
+
         try:
             sns.jointplot(x=self.raw_data[self.x_axis], y=self.raw_data[self.y_axis], kind="kde", palette="Blues")
         except:
@@ -68,6 +116,14 @@ class exploration_page():
 
 
     def scatter_matrix(self, prob_type):
+
+        """
+
+        PLOT A SCATTER_MATRIX OF THE N COLUMNS CHOSEN BY THE USER
+        IN CASE OF A CLASSIFICATION PROBLEM WE ADAPT THE COLORS FOR CLASSES
+
+        """
+
         if len(self.scatter_rows) != 0:
             if prob_type == "classification":
                 g = sns.pairplot(self.raw_data[self.scatter_rows+[self.out_col]],
@@ -84,6 +140,15 @@ class exploration_page():
             st.warning("select rows first")
 
     def plot_hist(self):
+
+        """
+
+        A HISTOGRAM AND KDE OF A COLUMN
+        IN CASE OF CLASSIFICATION (2 HISTOGRAMS OF THE 2 CLASSES ON THE SAME PLOT)
+        THIS IS A BINARY VERSION OF PLOT_HIST_M THAT HAS BEEN ABANDONNED
+
+        """
+
         new_df_0 = self.raw_data.loc[self.raw_data[self.out_col]==0 ][self.hist_col]
         new_df_1 = self.raw_data.loc[self.raw_data[self.out_col]==1 ][self.hist_col]
         hist0, _ = np.histogram(new_df_0)
@@ -95,6 +160,14 @@ class exploration_page():
         st.pyplot()
 
     def plot_hist_m(self):
+
+        """
+
+        A HISTOGRAM AND KDE OF A COLUMN
+        IN CASE OF CLASSIFICATION (N HISTOGRAMS OF THE N CLASSES ON THE SAME PLOT)
+
+        """
+
         self.unique_out = list(map(str,self.raw_data[self.out_col].unique().tolist()))
 
         plt.figure()
@@ -104,16 +177,37 @@ class exploration_page():
         st.pyplot()
 
     def get_box_col(self):
+
+        """
+
+        ASKS THE USER WHICH COLUMN THEY WANT TO USE FOR THE BOXPLOT
+
+        """
+
         st.subheader("Box plot")
         self.box_col = st.selectbox('Which feature?',
                                     self.raw_data.drop(self.out_col, axis=1)\
                                     .columns)
 
     def plot_box_altair(self):
+
+        """
+
+        A BOXPLOT OF A COLUMN IN REGARD OF THE PREDICTIONS COLUMN
+
+        """
+
         graph = alt.Chart(self.raw_data).mark_boxplot().encode(x = self.box_col, y = self.out_col).properties(width=500,height=500)
         st.write(graph)
 
     def plot_box_seaborn(self):
+
+        """
+
+        A BOXPLOT OF A COLUMN IN REGARD OF THE PREDICTIONS COLUMN
+
+        """
+
         plt.figure()
         if self.raw_data[self.box_col].nunique()<7:
             sns.boxplot(x = self.box_col, y = self.out_col, data=self.raw_data)
@@ -122,6 +216,13 @@ class exploration_page():
             st.warning("feature contain too much unique values \n please choose another column")
 
     def plot_corr_matrix(self):
+
+        """
+
+        PLOT THE CORRELATION MATRIX OF THE DATASET USING THE CHOSEN METHOD
+
+        """
+
         plt.subplots(figsize=(20,15))
         sns.heatmap(self.raw_data\
                     .select_dtypes(exclude='object')\
@@ -131,6 +232,13 @@ class exploration_page():
 
 
     def plot_pca(self):
+
+        """
+
+        PLOT THE FIRST 2 AXIS OF THE PCA TRANSFORMATION OF THE DATASET
+
+        """
+
         st.subheader("PCA")
         st.warning("This will ignore non numerical columns")
         from sklearn.decomposition import PCA
@@ -162,6 +270,13 @@ class exploration_page():
 
 
     def routine(self, prob_type):
+
+        """
+
+        THE LOOP THAT STREAMLIT WILL BE EXECUTING
+
+        """
+
         self.get_2_axis_viz()
         self.joint_plot()
         self.get_scatter_matrix_rows()

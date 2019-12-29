@@ -15,7 +15,7 @@ class ml_page():
     """
 
     This class does the machine learning in classification problems
-    
+
     """
 
     def __init__(self,session_state):
@@ -36,26 +36,74 @@ class ml_page():
 
 
     def get_ml_algs(self):
+
+        """
+
+        ASKS THE USER FOR THE ML ALGORITHMS TO USE FOR TRAINING
+
+        """
+
         self.algorithms = st.multiselect('ML algorithms?', self.ml_list_names)
 
     def get_train_ratio(self):
+
+        """
+
+        ASKS THE USER FOR THE TRAINING SET RATIO TO USE
+
+        """
+
         self.percent_train = st.slider('train set ratio', 0, 100, 80)
 
     def get_cv_check(self):
+
+        """
+
+        ASKS THE USER IF THEY WANT TO USE CROSS VALIDATION
+
+        """
+
         self.cv_check= st.checkbox("use cross validation ?")
 
     def get_cv_k(self):
+
+        """
+
+        ASKS THE USER FOR THE NUMBER OF K - FOLD (USED IN CASE THEY CHOSE TO USE CROSS VALIDATION)
+
+        """
+
         self.k_cv = st.slider('K fold cross validation', 2, 10, 3)
 
     def get_meta_model_check(self):
+
+        """
+
+        ASKS THE USER IF THEY WANT TO USE A META MODEL ON TOP OF THE FIRST ONE
+
+        """
+
         self.meta_model_check = st.checkbox("use a meta model ?")
 
     def get_meta_model(self):
+
+        """
+
+        ASKS THE USER ABOUT THE TYPE OF META MODEL THEY WANT TO USE
+
+        """
+
         self.meta_model_type = st.selectbox("meta model type :", ["voting", "stacking"])
         self.meta_model = st.radio("choose a meta model (if meta model type is stacking)", self.meta_ml_list_names)
 
 
     def train_algs(self):
+
+        """
+
+        TRAIN WlTHOUT CROSS VALIDATION
+
+        """
 
         st.subheader("Results")
         self.chosen_models_names = []
@@ -151,6 +199,13 @@ class ml_page():
                 st.write(self.meta_model+' stack score',accuracy_score(stack_predictions, Y_test))
 
     def train_algs_cv(self):
+
+        """
+
+        TRAIN USING CROSS VALIDATION
+
+        """
+
         st.subheader("Results using cross validation")
         self.chosen_models_names = []
         self.chosen_models = []
@@ -233,12 +288,27 @@ class ml_page():
 
 
     def train(self):
+
+        """
+
+        LAUNCH THE TRAINING
+        EITHER USING CROSS VALIDATION OR NOT
+
+        """
+
         if not self.cv_check:
             self.train_algs()
         else:
             self.train_algs_cv()
 
     def routine(self):
+
+        """
+
+        THE LOOP THAT STREAMLIT WILL BE EXECUTING
+
+        """
+
         self.get_ml_algs()
         self.get_train_ratio()
         self.get_cv_check()
