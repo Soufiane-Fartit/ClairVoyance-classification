@@ -74,12 +74,12 @@ class exploration_page():
                                 vars = self.scatter_rows,
                                 hue = self.out_col,
                                 diag_kind = 'hist', palette="Blues")
-                st.pyplot(g)
+                st.pyplot()
             else:
                 g = sns.pairplot(self.raw_data[self.scatter_rows+[self.out_col]],
                                 vars = self.scatter_rows,
                                 diag_kind = 'hist', palette="Blues")
-                st.pyplot(g)
+                st.pyplot()
         else:
             st.warning("select rows first")
 

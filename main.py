@@ -22,6 +22,14 @@ import os
 
 
 class clairevoyance():
+    """
+
+    The core of the application
+    This class orchestrate all the main components (loading page, data engineering page, EDA page, ML page)
+    It contains all of the sidebar elements and initiate the other classes with the right "session_state"
+
+    """
+
     def __init__(self, session_state):
         self.tab = "Data Loading"
         self.loading_session_state = SessionState.get(file = session_state.file,
