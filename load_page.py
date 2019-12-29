@@ -52,7 +52,8 @@ class loading_page():
 
     def load_data_from_path_or_link(self, path):
         self.data_load_state = st.text('Loading dataset...')
-        self.raw_data = pd.read_csv(path, nrows=10000, sep= ';|,', index_col=False)
+        self.raw_data = pd.read_csv(path, nrows=10000, index_col=False)
+        #self.raw_data = pd.read_csv(path, nrows=10000, sep= ';|,', index_col=False)
         self.data_check = True
         self.data_load_state.success('Loading dataset...done!')
 
