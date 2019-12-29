@@ -12,6 +12,11 @@ import os
 
 class ml_reg_page():
 
+    """
+
+    This class does the machine learning in regression problems
+
+    """
 
     def __init__(self,session_state):
         self.session_state = session_state

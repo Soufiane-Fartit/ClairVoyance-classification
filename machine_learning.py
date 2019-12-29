@@ -12,6 +12,11 @@ import os
 
 class ml_page():
 
+    """
+
+    This class does the machine learning in classification problems
+    
+    """
 
     def __init__(self,session_state):
         self.session_state = session_state

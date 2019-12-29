@@ -10,7 +10,7 @@ from machine_learning import ml_page
 from machine_learning_regression import ml_reg_page
 
 import numpy as np
-import pandas as p
+import pandas as pd
 
 import matplotlib
 matplotlib.use('agg')

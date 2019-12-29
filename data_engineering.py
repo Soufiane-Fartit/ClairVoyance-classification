@@ -9,6 +9,12 @@ import os
 
 class data_engineering_page():
 
+    """
+
+    This class provides the necessary tools to clean the data: impute, encode, SMOTE, scale, discretize
+
+    """
+
 
     def __init__(self,session_state):
         self.session_state = session_state
