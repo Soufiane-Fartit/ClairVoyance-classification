@@ -18,7 +18,7 @@ class exploration_page():
 
     """
 
-    THIS CLASS IS DEDICATED TO THE VISUALIZATION OF THE DATASET 
+    THIS CLASS IS DEDICATED TO THE VISUALIZATION OF THE DATASET
 
     """
 
@@ -94,7 +94,11 @@ class exploration_page():
 
         """
 
-        graph = alt.Chart(self.raw_data).mark_circle().encode(x=self.x_axis, y=self.y_axis)
+        graph = alt.Chart(self.raw_data)\
+                .mark_circle()\
+                .encode(x=self.x_axis,
+                        y=self.y_axis)
+
         st.write(graph)
 
     def joint_plot(self):
@@ -106,10 +110,17 @@ class exploration_page():
         """
 
         try:
-            sns.jointplot(x=self.raw_data[self.x_axis], y=self.raw_data[self.y_axis], kind="kde", palette="Blues")
+            sns.jointplot(x=self.raw_data[self.x_axis],
+                        y=self.raw_data[self.y_axis],
+                        kind="kde",
+                        palette="Blues")
         except:
             try:
-                sns.catplot(x=self.x_axis, y=self.y_axis, kind="swarm", data=self.raw_data, palette="Blues")
+                sns.catplot(x=self.x_axis,
+                            y=self.y_axis,
+                            kind="swarm",
+                            data=self.raw_data,
+                            palette="Blues")
             except:
                 st.error("something is wrong, please chose another column")
         st.pyplot()
