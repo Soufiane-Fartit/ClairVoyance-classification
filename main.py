@@ -19,10 +19,11 @@ import seaborn as sns
 import altair as alt
 
 import os
+import base64
 
 
 class clairevoyance():
-    
+
     """
 
     The core of the application
@@ -76,6 +77,12 @@ class clairevoyance():
         st.sidebar.title("ClairVoyance - classification/regression")
         self.problem_type = st.sidebar.selectbox("type of problem", ["classification", "regression"])
         self.tab = st.sidebar.radio('Pick an option', ['Data Loading', 'Data Engineering', 'Data Exploration', 'Machine Learning'])
+        st.sidebar.header("Download current data")
+        if st.sidebar.button("download"):
+            csv = session_state.raw_data.to_csv(index=False)
+            b64 = base64.b64encode(csv.encode()).decode()
+            href = f'<a href="data:file/csv;base64,{b64}">Download CSV File</a> (right-click and save as &lt;some_name&gt;.csv)'
+            st.sidebar.markdown(href, unsafe_allow_html=True)
         st.sidebar.header("About")
         st.sidebar.info('This app is made and maintained \n\nby [Soufiane Fartit]('
                     'https://www.linkedin.com/in/soufiane-fartit/).')
